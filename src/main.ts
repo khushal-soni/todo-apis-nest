@@ -11,6 +11,8 @@ async function bootstrap() {
     origin: '*',
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
+    preflightContinue: false, // Stop preflight requests from being passed to the next middleware
+    optionsSuccessStatus: 204, // Some legacy browsers choke on 204
   });
   await app.listen(3000);
 }
