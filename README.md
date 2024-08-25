@@ -1,30 +1,13 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This project is a backend API for a To-Do client application, built using the [NestJS](https://nestjs.com/) framework. It provides a robust and scalable RESTful API for managing to-do items, including functionalities for creating, retrieving, updating, and deleting tasks.
+
+## Features
+
+- **Task Management**: Create, update, delete, and retrieve tasks.
+- **Task Filtering**: Filter tasks by status and user.
+- **Task Toggling**: Update the status of tasks to mark them as completed, pending, or delete them.
+- **Bulk Deletion**: Delete completed tasks in bulk.
 
 ## Project setup
 
@@ -58,28 +41,71 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Resources
+## Configure Environment Variables
 
-Check out a few resources that may come in handy when working with NestJS:
+Create a `.env` file in the root directory and add the following environment variables:
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```
+DATABASE_URL=your-database-url
+JWT_SECRET=your-jwt-secret
+PORT=3000
+```
 
-## Support
+## API Endpoints
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### Create a Task
 
-## Stay in touch
+- **Endpoint**: `POST /todos`
+- **Description**: Create a new to-do item.
+- **Request Body**: `CreateTodoDto` (e.g., `{ title: string, description: string, status: string, userId: string }`)
+- **Response**: `Todo` object
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### Retrieve All Tasks
+
+- **Endpoint**: `GET /todos`
+- **Description**: Retrieve a list of all to-do items, optionally filtered by status and user.
+- **Query Parameters**:
+  - `status` (optional): Filter tasks by status.
+  - `userId` (optional): Filter tasks by user.
+- **Response**: Array of `Todo` objects
+
+### Retrieve a Single Task
+
+- **Endpoint**: `GET /todos/:id`
+- **Description**: Retrieve a specific to-do item by ID.
+- **Path Parameters**:
+  - `id`: ID of the task to retrieve.
+- **Query Parameters**:
+  - `userId` (optional): Specify the user ID to filter.
+- **Response**: `Todo` object
+
+### Delete Completed Tasks
+
+- **Endpoint**: `DELETE /todos/complete`
+- **Description**: Delete all completed tasks for a specific user.
+- **Query Parameters**:
+  - `userId`: ID of the user whose completed tasks are to be deleted.
+- **Response**: No content (void)
+
+### Delete a Task
+
+- **Endpoint**: `DELETE /todos/:id`
+- **Description**: Delete a specific to-do item by ID.
+- **Path Parameters**:
+  - `id`: ID of the task to delete.
+- **Query Parameters**:
+  - `userId` (optional): Specify the user ID to filter.
+- **Response**: No content (void)
+
+### Update a Task
+
+- **Endpoint**: `PATCH /todos/:id`
+- **Description**: Update a specific to-do item by ID.
+- **Path Parameters**:
+  - `id`: ID of the task to update.
+- **Request Body**: `UpdateTodoDto` (e.g., `{ title?: string, description?: string, status?: string }`)
+- **Response**: Updated `Todo` object
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
