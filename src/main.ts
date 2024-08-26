@@ -8,11 +8,12 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe()); // * Enable global validation
   app.enableCors({
-    origin: ['*', 'http://localhost:4200'],
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    origin: ['http://localhost:4200'],
+    // methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     allowedHeaders: ['Content-Type', 'Authorization'],
-    preflightContinue: true,
-    optionsSuccessStatus: 200,
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
   });
   await app.listen(3000);
 }
