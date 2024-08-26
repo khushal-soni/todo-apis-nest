@@ -10,6 +10,7 @@ import { TodosModule } from './todos/todos.module';
 import { LoggerMiddleware } from './logger/logger.middleware';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
+import { OptionsMiddleware } from './options/options.middleware';
 
 @Module({
   imports: [
@@ -23,6 +24,8 @@ import { ConfigModule } from '@nestjs/config';
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     // consumer.apply(LoggerMiddleware).forRoutes('todos');
+
+    consumer.apply(OptionsMiddleware).forRoutes('*'); // Apply this middleware to all routes
 
     // * In the above example we have set up the LoggerMiddleware for the /todos route handlers that were previously defined inside the TodosController. We may also further restrict a middleware to a particular request method by passing an object containing the route path and request method to the forRoutes() method when configuring the middleware
     consumer.apply(LoggerMiddleware).forRoutes({
