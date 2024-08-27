@@ -1,6 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+
 
 // * To create a Nest applicate instance, we use the core NestFactory class. NestFactory exposes a few static methods that allow creating an application instance. The create() method returns an application object, which fulfills the INestApplication interface. This object provides a set of methods. In the main.ts example below, we simply start up our HTTP Listener, which lets the application await inbound HTTP requests.
 
@@ -15,6 +17,16 @@ async function bootstrap() {
     preflightContinue: false,
     optionsSuccessStatus: 204,
   });
+
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle('To-Do App')
+    .setDescription('A To-Do app written in NestJS')
+    .setVersion('1.0')
+    .build();
+
+  const document = SwaggerModule.createDocument(app, swaggerConfig);
+  SwaggerModule.setup('api', app, document);
+
   await app.listen(3000);
 }
 bootstrap();

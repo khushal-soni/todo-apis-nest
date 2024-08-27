@@ -13,16 +13,41 @@ import { Todo } from 'src/schemas/todos.schema';
 import { TodosService } from './todos.service';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
+import { ApiOperation, ApiQuery } from '@nestjs/swagger';
+
+enum TodoStatus {
+  PENDING = 'pending',
+  COMPLETED = 'completed',
+  ALL = 'all',
+}
 
 @Controller('todos')
 export class TodosController {
   constructor(private todoService: TodosService) {}
 
+  @ApiOperation({
+    summary: 'Create a to-do for a user',
+  })
   @Post()
   async createTodo(@Body() createTodoDto: CreateTodoDto): Promise<Todo> {
     return await this.todoService.createTodo(createTodoDto);
   }
 
+  @ApiOperation({
+    summary: 'Get all to-dos of a user',
+  })
+  @ApiQuery({
+    name: 'status',
+    description: 'Filter to-dos by their status',
+    enum: TodoStatus,
+    enumName: 'TodoStatus',
+    example: TodoStatus.ALL,
+  })
+  @ApiQuery({
+    name: 'userId',
+    description: 'ID of the user whose to-dos are being fetched',
+    example: 'random_user_id_98765543211',
+  })
   @Get()
   async getTodos(
     @Query('status') status: string,
@@ -31,6 +56,20 @@ export class TodosController {
     return this.todoService.getTodos(status, userId);
   }
 
+  @ApiOperation({
+    summary: 'Get a to-do by ID',
+  })
+  @ApiQuery({
+    name: 'id',
+    description:
+      'ID of the to-do being fetched. You can find this id from the get all todos api',
+    example: '66ccc70ea2c6ae360479ae00',
+  })
+  @ApiQuery({
+    name: 'userId',
+    description: 'ID of the user whose to-dos are being fetched',
+    example: 'random_user_id_98765543211',
+  })
   @Get(':id')
   // async getTodo(@Param('id', ParseIntPipe) id: number): Promise<Todo> {
   async getTodo(
@@ -40,12 +79,18 @@ export class TodosController {
     return this.todoService.getTodo(id, userId);
   }
 
+  @ApiOperation({
+    summary: 'Delete all to-dos marked as completed',
+  })
   @Delete('complete')
   async deleteCompletedTodos(@Query('userId') userId: string): Promise<void> {
     const result = await this.todoService.deleteCompletedTodos(userId);
     console.log(result);
   }
 
+  @ApiOperation({
+    summary: 'Delete a to-do by ID',
+  })
   @Delete(':id')
   async deleteTodo(
     @Param('id') id: string,
@@ -54,6 +99,9 @@ export class TodosController {
     this.todoService.deleteTodo(id, userId);
   }
 
+  @ApiOperation({
+    summary: 'Update a to-do by ID',
+  })
   @Patch(':id')
   async updateTodo(
     @Param('id') id: string,
